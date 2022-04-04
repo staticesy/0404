@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02 제이쿼리 문서객체조작을 활용한 이미지 갤러리 구현</title>
+
+  <!-- 아이콘 폰트 연결 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="./script/jquery.cookie.js"></script> 
+
+  <style>
+
+  *{margin: 0px; padding: 0px;}
+  ol, ul, li{list-style: none;}
+  a{text-decoration: none;}
+  body{
+    font-family: "맑은 고딕", arial, sans-serif;
+    font-size: 12px;
+    color: #333;
+  }
+  h2, ol{padding: 10px;}
+
+  #gallery{
+    width: 1240px;
+    margin: 0px auto;
+    border: 3px solid #000;
+  }
+  #gallery > h3{text-align: center;}
+  #gallery > ul {
+    display: grid;
+    padding: 20px;
+    grid-gap: 0px;
+    grid-template-columns: repeat(4, auto);
+    grid-template-rows: repeat(3, 195px);
+  }
+  #gallery > ul > li{
+    overflow: hidden;
+    position: relative; /*caption의 부모요소에 기준 설정*/
+  }
+  #gallery > ul > li img{
+    width: 100%;
+    transition: 0.5s;
+  }
+
+  #gallery > ul > li img:hover{
+    transform: scale(1.1);
+  }
+
+  .caption{
+    background: rgba(0,0,0,.8);
+    color: #fff;
+    font-size: 14px;
+    position: absolute;
+    width: 100%;
+    bottom: -30px; left: 0px;
+    line-height: 30px;
+    text-indent: 10px; /*padding 대신 text-indent를 주기 width 100을 주었기 때문에 패딩값을 주면 width가 110이 되어버림*/
+  }
+
+  /* 모달서식 */
+  .modal{
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.8);
+    position: fixed;
+    top: 0px; left: 0px;
+    text-align: center;
+  }
+
+  .modal img{
+    padding-top: 3%;
+    max-width: 600px;
+  }
+
+  .modal a{
+    color: #fff;
+    font-size: 30px;
+    position: fixed; right: 30%; top: 5%;
+  }
+  </style>
+
+
+  <script>
+    $(function(){
+
+
+      //갤러리 이미지 목록(li)에 마우스 오버시 캡션 나오게 하기
+      $('#gallery li').mouseenter(function(){ //마우스 오버시 동작
+        $(this).find('.caption').stop().animate({'bottom':'0px'},300); //마우스 올린 li태그의 자손 caption
+      });
+
+      $('#gallery li').mouseleave(function(){ //마우스 아웃시 동작
+        $('.caption').stop().animate({'bottom':'-30px'},300);
+      });
+
+      //목록안의 img태그의 src값 불러오기
+      $('#gallery li').click(function(){
+        const img_url = $(this).find('img').attr('src');
+        console.log(img_url); //이미지 src 속성값이 출력되는지 확인한다.
+
+        let modal = "<div class='modal'><div><img src="+img_url+"><a href='#' title='닫기'><i class='fas fa-times'></a></div></div>";
+
+        $('body').append(modal); //이미지를 body태그 안쪽의 뒤에 나오게 한다.
+
+         //닫기 버튼 클릭시 모달 윈도 숨기기 append 뒤에 와야함 
+          $('.modal a').click(function(){
+            $('.modal').fadeOut();
+            return false; //새로고침 방지 a태그의 # 무력화
+          });
+
+      });
+
+    
+    });
+
+
+  </script>
+  
+
+</head>
+<body>
+  <h2>02 제이쿼리 문서객체조작을 활용한 이미지 갤러리 구현</h2>
+  <ol>
+    <li>12장의 이미지를 목록으로 작성</li>
+    <li>이미지 클릭시 해당 이미지의 src속성값을 가져와서 변수에 저장 후 모달 레이어로 띄우기</li>
+    <li>모달레이어에서 '닫기'버튼 누르면 해당 이미지가 숨겨진다</li>
+    <li>이미지목록에 마우스오버시 해당 캡션이 나오게 한다.</li>
+  </ol>
+
+  <article id="gallery">
+    <h3>GALLERY</h3>
+    <ul>
+      <li>
+        <a href="#" title="계획">
+          <img src="./images/img1.jpg" alt="계획">
+          <p class="caption">계획</p>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="디자인">
+          <img src="./images/img2.jpg" alt="디자인">
+          <p class="caption">디자인</p>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="설계">
+          <img src="./images/img3.jpg" alt="설계">
+          <p class="caption">설계</p>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="디자인">
+          <img src="./images/img4.jpg" alt="디자인">
+          <p class="caption">디자인</p>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="계획">
+          <img src="./images/img5.jpg" alt="계획">
+          <p class="caption">계획</p>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="디자인">
+          <img src="./images/img6.jpg" alt="디자인">
+          <p class="caption">디자인</p>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="디자인">
+          <img src="./images/img7.jpg" alt="디자인">
+          <p class="caption">디자인</p>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="디자인">
+          <img src="./images/img8.jpg" alt="디자인">
+          <p class="caption">디자인</p>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="개발">
+          <img src="./images/img9.jpg" alt="개발">
+          <p class="caption">개발</p>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="계획">
+          <img src="./images/img10.jpg" alt="계획">
+          <p class="caption">계획</p>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="개발">
+          <img src="./images/img11.jpg" alt="개발">
+          <p class="caption">개발</p>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="설계">
+          <img src="./images/img12.jpg" alt="설계">
+          <p class="caption">설계</p>
+        </a>
+      </li>
+    </ul>
+  </article>
+  
+</body>
+</html>
